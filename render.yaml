@@ -1,0 +1,21 @@
+# Render Blueprint: the Vyavahr WhatsApp gateway. Free plan, no card needed.
+# Render asks for DATABASE_URL when you apply it: the Supabase SESSION pooler URL (port 5432) of the Vyavahr project.
+# One linked number takes about 40-80 MB; the free 512 MB instance holds about 5 (MAX_SESSIONS). For more shops,
+# move the service to a bigger instance and raise MAX_SESSIONS (2 GB holds about 25).
+services:
+  - type: web
+    name: vyavahr-wa-gateway
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: npm install --omit=dev
+    startCommand: node index.js
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: MAX_SESSIONS
+        value: "5"
+      - key: NODE_VERSION
+        value: "22"
